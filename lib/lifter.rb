@@ -19,12 +19,12 @@ class Lifter
   end
 
   def gyms
-    Gym.all.select {|gym| gym.lifters.include?(self)}
+    self.memberships.collect {|membership| membership.gym}
   end
 
-  def average_lift
+  def self.average_lift
     lift_totals = self.all.collect {|lifter| lifter.lift_total}
-    lift_totals.inject {|sum, num| sum + num} / self.all.count
+    (lift_totals.inject {|sum, num| sum + num}.to_f / self.all.count).round(1)
   end
 
   def total_cost
@@ -33,8 +33,7 @@ class Lifter
   end
 
   def get_membership (gym, cost)
-    membership = Membership.new(cost)
-    membership.lifter = self
-    membership.gym = gym
+    Membership.new(cost, gym, self)
   end
+
 end

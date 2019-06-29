@@ -5,7 +5,6 @@ class Gym
 
   def initialize(name)
     @name = name
-    @lifters = []
     Gym.all << self
   end
 
@@ -18,11 +17,15 @@ class Gym
   end
 
   def all_lifters
-    self.lifters.collect {|lifter| lifter.name}
+    self.memberships.collect {|membership| membership.lifter}
+  end
+
+  def all_lifter_names
+    self.all_lifters.collect {|lifter| lifter.name}
   end
 
   def combined_lifts
-    all_lifts = self.lifters.collect {|lifter| lifter.lift_total}
+    all_lifts = self.all_lifters.collect {|lifter| lifter.lift_total}
     all_lifts.inject {|sum, num| sum + num}
   end
 
